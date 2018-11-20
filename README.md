@@ -1,4 +1,4 @@
-﻿# JavaFX_AiLaTrieuPhu
+# JavaFX_AiLaTrieuPhu
 Bài tập lớn môn Lập trình Java - Game Ai là triệu phú.
 <br />
 Sử dụng JavaFX, Hibernate và MySQL.
