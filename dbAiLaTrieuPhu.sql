@@ -48,6 +48,7 @@ CREATE TABLE `cau_hoi` (
 
 LOCK TABLES `cau_hoi` WRITE;
 /*!40000 ALTER TABLE `cau_hoi` DISABLE KEYS */;
+INSERT INTO `cau_hoi` VALUES ('\"Bu\" là gì?','Bà','Mẹ','Ông','Cha','B',9,1,0),('\"El Nino\" là gì?','Một vũ công chuyên nghiệp','Một khu rừng ở châu phi','Một điệu nhảy','Một hiện tượng thời tiết','D',9,1,0),('\"Trở về Eden\" là tiểu thuyết của tác giả nào?','Margaret Atwood','Steve Jobs','Rosalind Miles','Tim Cook','C',3,3,0),('1 + 1 = ?','0','2','69','10','B',1,1,0),('Ai là vị vua cuối cùng của triều đại nhà Mạc?','Mạc Văn Khoa','Mạc Đĩnh Chi','Mạc Từ Tốn','Mạc Toàn','D',13,3,0),('Bảy chú lùn trong \"Bạch Tuyết và bảy chú lùn\" làm nghề gì?','Thợ rèn','Thợ may','Thợ săn','Thợ mỏ','D',3,2,0),('Biểu tượng của thành phố Vác-xa-va, thủ đô Ba Lan là biểu tượng mang hình gì?','Một vị thánh','Một chú sư tử','Một nàng tiên','Một nàng tiên cá','D',9,3,0),('Hang động lớn nhất thế giới nằm ở đâu?','Malaysia','Chile','Việt Nam','Nam Phi','C',9,2,0),('Làng cổ Phước Tích ở Huế có nghề truyền thống gì?','Làm áo dài','Làm gốm','Làm tranh thờ cúng','Làm nước mắm','B',9,3,0),('Màu nào sau đây không có trên lá cờ Olympic','Đen','Tím','Đỏ','Xanh dương','B',9,2,0),('Người ta thường nấu canh cua với thứ gì?','Củ cải','Rau đay','Mộc nhĩ','Quả óc chó','B',8,2,0),('Quần đảo Nam Du thuộc tỉnh nào nước ta?','Cà Mau','Kiên Giang','Bạc Liêu','Trà Vinh','B',12,2,0),('Sông Trà Khúc nằm ở tỉnh nào?','Quảng Ngãi','Thanh Hoá','Quảng Bình','Nghệ An','A',12,3,0),('Tác phẩm \"Đời thừa\" của Nam Cao lần đầu tiên được đăng trên báo nào?','Tiểu thuyết thứ bảy','Ngày nay','Phụ nữ tân văn','Tiểu thuyết tình yêu','A',9,3,0),('Theo dân gian, sông Hương có mùi thơm là do loài cây nào mọc ở hai bên bờ?','Thạch xương bồ','Bồ công anh','Thạch thảo','Dạ hương','A',9,3,0),('Theo một câu hát \"Ba thương con vì con giống mẹ, mẹ thương con vì con giống ...\" ai?','Ông hàng xóm','Chú cạnh nhà','Ba','Bác đầu ngõ','C',11,1,0),('Thương cảng Vân Đồn cổ xưa của nước Đại Việt được thành lập dưới thời vị vua nào?','Lý Thánh Tông','Lý Nhân Tông','Lý Anh Tông','Lý Cao Tông','C',13,3,0),('Trong bàn cờ tướng có bao nhiêu quân Mã?','1','2','3','4','B',9,1,0),('Trong hệ nhị phân, 1 + 1 = ?','2','0','1010','10','D',10,1,0),('Đất nước nào nằm ở Châu Âu?','Trung Quốc','Đông Timo','Ai Cập','Pháp','D',12,2,0),('Đâu là loại cháo khác với các món còn lại?','Cháo bò','Cháo gà','Cháo heo','Cháo vịt','C',9,2,0),('Đâu là một sáng tác của Sơn Tùng M-TP','Nơi này có chị','Nơi này có anh','Nơi này có chú','Nơi này có cha','B',11,1,0),('Đâu là một tác phẩm Opera của nhà soạn kịch người Nga Pyotr Ilyich Tchaikovsky','Hồ Thiên Nga','Cô gái Orleans','Người đẹp ngủ trong rừng','Romeo và Juliet','B',3,3,0),('Đâu là tên một loại mũ?','Lưỡi hái','Lưỡi lê','Lưỡi trai','Lưỡi bò','C',9,2,0),('Đâu là tên một truyện cổ tích?','Công chúa ngủ trong rừng','Công chúa ngủ trong tủ','Công chúa ngủ trên giường','Công chúa bị mất ngủ','A',3,1,0),('Điền vào chỗ trống trong câu sau: \"Gieo gió gặt ...\"','Lũ','Mưa','Giông','Bão','D',9,1,0);
 /*!40000 ALTER TABLE `cau_hoi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +63,7 @@ CREATE TABLE `linh_vuc` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(500) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +72,7 @@ CREATE TABLE `linh_vuc` (
 
 LOCK TABLES `linh_vuc` WRITE;
 /*!40000 ALTER TABLE `linh_vuc` DISABLE KEYS */;
-INSERT INTO `linh_vuc` VALUES (1,'Toán học'),(2,'Sinh học'),(3,'Văn học'),(4,'Khoa học'),(5,'Hoá học'),(6,'Ngoại ngữ'),(7,'Thể thao'),(8,'Ẩm thực'),(9,'Đời sống');
+INSERT INTO `linh_vuc` VALUES (1,'Toán học'),(2,'Sinh học'),(3,'Văn học'),(4,'Khoa học'),(5,'Hoá học'),(6,'Ngoại ngữ'),(7,'Thể thao'),(8,'Ẩm thực'),(9,'Đời sống'),(10,'Tin học'),(11,'Âm nhạc'),(12,'Địa lý'),(13,'Lịch sử');
 /*!40000 ALTER TABLE `linh_vuc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +124,7 @@ CREATE TABLE `nguoi_dung` (
 
 LOCK TABLES `nguoi_dung` WRITE;
 /*!40000 ALTER TABLE `nguoi_dung` DISABLE KEYS */;
-INSERT INTO `nguoi_dung` VALUES ('admin','123456','Bao Le','Nam',1997,'Ho Chi Minh'),('user1','123456','User 1','Nu',1996,'Ha Noi');
+INSERT INTO `nguoi_dung` VALUES ('admin','123456','Bảo Lê','Nam',1997,'Hồ Chí Minh'),('user1','123456','User Một','Nam',1996,'Hà Nội');
 /*!40000 ALTER TABLE `nguoi_dung` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -136,4 +137,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-19 15:27:50
+-- Dump completed on 2018-11-20 16:43:24

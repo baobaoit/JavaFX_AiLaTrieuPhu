@@ -2,14 +2,21 @@ package demoaltp;
 
 import demoaltp.database.HibernateUtil;
 import demoaltp.modal.NguoiDung;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -23,18 +30,28 @@ public class DangNhapController implements Initializable {
     private SessionFactory factory;
     private Alert msg;
     @FXML
+    private GridPane gpDangNhap;
+    @FXML
     private TextField txtTaiKhoan;
     @FXML
     private PasswordField txtMatKhau;
+    private Stage curWindow;
 
     @FXML
     private void troVeHandler(ActionEvent event) {
-
+        
     }
 
     @FXML
     private void dangKyHandler(ActionEvent event) {
-
+        try {
+            curWindow = (Stage)gpDangNhap.getScene().getWindow();
+            
+            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("DangKy.fxml"))));
+            curWindow.show();
+        } catch (IOException ex) {
+            Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

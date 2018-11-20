@@ -2,16 +2,22 @@ package demoaltp;
 
 import demoaltp.database.HibernateUtil;
 import demoaltp.modal.NguoiDung;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -21,6 +27,7 @@ import org.hibernate.Transaction;
  * @author BaoBao
  */
 public class DangKyController implements Initializable {
+
     private SessionFactory factory;
     @FXML
     private GridPane gpDangKy;
@@ -41,17 +48,25 @@ public class DangKyController implements Initializable {
     @FXML
     private RadioButton rdoKhac;
     private Alert msg;
-    
+    private Stage curWindow;
+
     @FXML
     private void troVeHandler(ActionEvent event) {
-        
+        try {
+            curWindow = (Stage) gpDangKy.getScene().getWindow();
+
+            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("DangNhap.fxml"))));
+            curWindow.show();
+        } catch (IOException ex) {
+            Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     @FXML
     private void dangKyHandler(ActionEvent event) {
         String msgErr = ""; // Noi dung thong bao loi
         String msgSucc = ""; // Noi dung thong bao thanh cong
-        
+
         String taiKhoan = txtTaiKhoan.getText();
         if (taiKhoan.isEmpty()) {
             // Tai khoan rong
@@ -61,7 +76,7 @@ public class DangKyController implements Initializable {
             taiKhoan = taiKhoan.trim().replaceAll("\\s+", "");
             msgSucc = msgSucc.concat(String.format("Tài khoản: %s\n", taiKhoan));
         }
-        
+
         String matKhau = txtMatKhau.getText();
         if (matKhau.isEmpty()) {
             // Mat khau rong
@@ -72,7 +87,7 @@ public class DangKyController implements Initializable {
         } else {
             msgSucc = msgSucc.concat(String.format("Mật khẩu: %s\n", matKhau));
         }
-        
+
         String hoTen = txtHoTen.getText();
         if (hoTen.isEmpty()) {
             // Ho ten rong
@@ -82,17 +97,17 @@ public class DangKyController implements Initializable {
             hoTen = hoTen.trim().replaceAll("\\s+", " ");
             msgSucc = msgSucc.concat(String.format("Họ tên: %s\n", hoTen));
         }
-        
+
         String gioiTinh = "Nam";
         if (rdoNam.isSelected()) {
-            gioiTinh = "Nam";
+            gioiTinh = rdoNam.getText();
         } else if (rdoNu.isSelected()) {
-            gioiTinh = "Nu";
+            gioiTinh = rdoNu.getText();
         } else if (rdoKhac.isSelected()) {
-            gioiTinh = "Khac";
+            gioiTinh = rdoKhac.getText();
         }
         msgSucc = msgSucc.concat(String.format("Giới tính: %s\n", gioiTinh));
-        
+
         String queQuan = txtQueQuan.getText();
         if (queQuan.isEmpty()) {
             // Que quan rong
@@ -102,7 +117,7 @@ public class DangKyController implements Initializable {
             queQuan = queQuan.trim().replaceAll("\\s+", " ");
             msgSucc = msgSucc.concat(String.format("Quê quán: %s\n", queQuan));
         }
-        
+
         int namSinh = 0;
         if (txtNamSinh.getText().isEmpty()) {
             // Nam sinh rong
@@ -121,35 +136,41 @@ public class DangKyController implements Initializable {
                     msg.setContentText(msgErr);
                     msg.show();
                 } else {
-                    saveNguoiDung(taiKhoan, matKhau, hoTen, gioiTinh, namSinh, queQuan);
-                    msg.setAlertType(Alert.AlertType.INFORMATION);
-                    msg.setHeaderText("Đăng ký thành công");
-                    msg.setContentText(msgSucc);
-                    msg.show();
+                    switch (saveNguoiDung(taiKhoan, matKhau, hoTen, gioiTinh, namSinh, queQuan)) {
+                        case 0:
+                            msg.setAlertType(Alert.AlertType.WARNING);
+                            msg.setHeaderText("Cảnh báo");
+                            msg.setContentText("Tài khoản này đã tồn tại. Vui lòng chọn tài khoản khác!\nXin cảm ơn.");
+                            msg.show();
+                            break;
+                        case 1:
+                            msg.setAlertType(Alert.AlertType.INFORMATION);
+                            msg.setHeaderText("Đăng ký thành công");
+                            msg.setContentText(msgSucc);
+                            msg.show();
+                            break;
+                    }
                 }
             }
         }
     }
-    
-    private void saveNguoiDung(String taiKhoan, String matKhau, String hoTen, String gioiTinh, int namSinh, String queQuan) {
+
+    private int saveNguoiDung(String taiKhoan, String matKhau, String hoTen, String gioiTinh, int namSinh, String queQuan) {
+        int tinhTrangDK = 0; // 0: ton tai tai khoan nay, 1: dang ky thanh cong
         Session session = this.factory.openSession();
-        NguoiDung nguoiDung = (NguoiDung)session.get(NguoiDung.class, taiKhoan);
-        Transaction trans = session.beginTransaction();
+        NguoiDung nguoiDung = (NguoiDung) session.get(NguoiDung.class, taiKhoan);
         if (nguoiDung == null) {
             // Them moi
-            nguoiDung = new NguoiDung();
-            nguoiDung.setTaiKhoan(taiKhoan);
+            tinhTrangDK = 1;
+            Transaction trans = session.beginTransaction();
+            nguoiDung = new NguoiDung(taiKhoan, matKhau, hoTen, gioiTinh, namSinh, queQuan);
+            session.save(nguoiDung);
+            trans.commit();
         }
-        nguoiDung.setMatKhau(matKhau);
-        nguoiDung.setHoTen(hoTen);
-        nguoiDung.setGioiTinh(gioiTinh);
-        nguoiDung.setNamSinh(namSinh);
-        nguoiDung.setQueQuan(queQuan);
-        session.save(nguoiDung);
-        trans.commit();
         session.close();
+        return tinhTrangDK;
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         factory = HibernateUtil.getSessionFactory();
