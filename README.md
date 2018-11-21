@@ -15,4 +15,5 @@ Giảng viên hướng dẫn: Thầy Dương Hữu Thành
 Phiên bản | Nội dung | Ngày commit
 ----------|----------|-------------
 Beta 1 | Demo chức năng đăng ký người dùng, đăng nhập. | 19/11/2018
-Beta 2 | Liên kết scene Đăng nhập, đăng ký.<br/>Thêm chức năng quản lý câu hỏi (Thêm, Cập nhật, Xoá, Phục hồi).<br />Tinh chỉnh chuỗi kết nối tới MySQL để có thể lưu chuỗi Unicode (UTF-8). | 20/11/2018
+Beta 2 | Liên kết scene Đăng nhập, đăng ký.<br />Thêm chức năng quản lý câu hỏi (Thêm, Cập nhật, Xoá, Phục hồi).<br />Tinh chỉnh chuỗi kết nối tới MySQL để có thể lưu chuỗi Unicode (UTF-8). | 20/11/2018
+Beta 3 | Dùng <strong>StringBuilder</strong> thay cho phương thức .concat của msgErr và msgSucc (DangKyController, DangNhapController, QLCauHoiController).<br />Fix bug và cải tiến ở QLCauHoiController.<br />Đổi tên phương thức <strong>saveCauHoi</strong> thành <strong>saveOrUpdateCauHoi</strong>.<br />Thêm nút chức năng tải lại dữ liệu cho TableView ở QLCauHoi.<br />Thêm thông báo xác nhận trước khi thêm một câu hỏi vào CSDL.| 21/11/2018
