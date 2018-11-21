@@ -64,38 +64,38 @@ public class DangKyController implements Initializable {
 
     @FXML
     private void dangKyHandler(ActionEvent event) {
-        String msgErr = ""; // Noi dung thong bao loi
-        String msgSucc = ""; // Noi dung thong bao thanh cong
+        StringBuilder msgErr = new StringBuilder(""); // Noi dung thong bao loi
+        StringBuilder msgSucc = new StringBuilder(""); // Noi dung thong bao thanh cong
 
         String taiKhoan = txtTaiKhoan.getText();
         if (taiKhoan.isEmpty()) {
             // Tai khoan rong
-            msgErr = msgErr.concat("Tài khoản: Trống!\n");
+            msgErr.append("Tài khoản: Trống!\n");
         } else {
             // Tai khoan khong duoc chua khoan trang
             taiKhoan = taiKhoan.trim().replaceAll("\\s+", "");
-            msgSucc = msgSucc.concat(String.format("Tài khoản: %s\n", taiKhoan));
+            msgSucc.append(String.format("Tài khoản: %s\n", taiKhoan));
         }
 
         String matKhau = txtMatKhau.getText();
         if (matKhau.isEmpty()) {
             // Mat khau rong
-            msgErr = msgErr.concat("Mật khẩu: Trống!\n");
+            msgErr.append("Mật khẩu: Trống!\n");
         } else if (matKhau.length() < 6) {
             // Mat khau co do dai duoi 6 ky tu
-            msgErr = msgErr.concat("Mật khẩu: Phải có tối thiểu 6 ký tự.\n");
+            msgErr.append("Mật khẩu: Phải có tối thiểu 6 ký tự.\n");
         } else {
-            msgSucc = msgSucc.concat(String.format("Mật khẩu: %s\n", matKhau));
+            msgSucc.append(String.format("Mật khẩu: %s\n", matKhau));
         }
 
         String hoTen = txtHoTen.getText();
         if (hoTen.isEmpty()) {
             // Ho ten rong
-            msgErr = msgErr.concat("Họ tên: Trống!\n");
+            msgErr.append("Họ tên: Trống!\n");
         } else {
             // Ho ten khong duoc chua khoan trang du thua
             hoTen = hoTen.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Họ tên: %s\n", hoTen));
+            msgSucc.append(String.format("Họ tên: %s\n", hoTen));
         }
 
         String gioiTinh = "Nam";
@@ -106,34 +106,42 @@ public class DangKyController implements Initializable {
         } else if (rdoKhac.isSelected()) {
             gioiTinh = rdoKhac.getText();
         }
-        msgSucc = msgSucc.concat(String.format("Giới tính: %s\n", gioiTinh));
+        msgSucc.append(String.format("Giới tính: %s\n", gioiTinh));
 
         String queQuan = txtQueQuan.getText();
         if (queQuan.isEmpty()) {
             // Que quan rong
-            msgErr = msgErr.concat("Quê quán: Trống!\n");
+            msgErr.append("Quê quán: Trống!\n");
         } else {
             // Que quan khong duoc chua khoan trang du thua
             queQuan = queQuan.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Quê quán: %s\n", queQuan));
+            msgSucc.append(String.format("Quê quán: %s\n", queQuan));
         }
 
         int namSinh = 0;
         if (txtNamSinh.getText().isEmpty()) {
             // Nam sinh rong
-            msgErr = msgErr.concat("Năm sinh: Trống!");
+            msgErr.append("Năm sinh: Trống!");
+
+            if (!msgErr.toString().isEmpty()) {
+                // Neu co loi xay ra
+                msg.setAlertType(Alert.AlertType.ERROR);
+                msg.setHeaderText("Lỗi đăng ký");
+                msg.setContentText(msgErr.toString());
+                msg.show();
+            }
         } else {
             try {
                 namSinh = Integer.parseInt(txtNamSinh.getText());
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
-                msgErr = msgErr.concat("Năm sinh: Không hợp lệ!");
+                msgErr.append("Năm sinh: Không hợp lệ!");
             } finally {
-                if (!msgErr.isEmpty()) {
+                if (!msgErr.toString().isEmpty()) {
                     // Neu co loi xay ra
                     msg.setAlertType(Alert.AlertType.ERROR);
                     msg.setHeaderText("Lỗi đăng ký");
-                    msg.setContentText(msgErr);
+                    msg.setContentText(msgErr.toString());
                     msg.show();
                 } else {
                     switch (saveNguoiDung(taiKhoan, matKhau, hoTen, gioiTinh, namSinh, queQuan)) {
@@ -146,7 +154,7 @@ public class DangKyController implements Initializable {
                         case 1:
                             msg.setAlertType(Alert.AlertType.INFORMATION);
                             msg.setHeaderText("Đăng ký thành công");
-                            msg.setContentText(msgSucc);
+                            msg.setContentText(msgSucc.toString());
                             msg.show();
                             break;
                     }

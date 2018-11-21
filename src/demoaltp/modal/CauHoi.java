@@ -50,7 +50,7 @@ public class CauHoi {
         this.mucDo = mucDo;
         this.xoa = xoa;
     }
-
+    
     public String getNoiDung() {
         return noiDung;
     }

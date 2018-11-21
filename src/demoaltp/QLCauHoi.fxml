@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="822.0" stylesheets="@QLCauHoiStyle.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demoaltp.QLCauHoiController">
+<TabPane fx:id="tpQLCauHoi" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="822.0" stylesheets="@QLCauHoiStyle.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demoaltp.QLCauHoiController">
   <tabs>
     <Tab text="Thêm">
          <content>
@@ -95,7 +95,7 @@
                     </rowConstraints>
                      <children>
                         <Label text="Nội dung" />
-                        <TextField fx:id="txtNoiDungEdit" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtNoiDungEdit" disable="true" GridPane.columnIndex="1" />
                         <TextField fx:id="txtDapAnAEdit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Đáp án A" GridPane.rowIndex="1" />
                         <Label layoutX="20.0" layoutY="82.0" text="Đáp án B" GridPane.rowIndex="2" />
@@ -123,6 +123,7 @@
                         <ComboBox fx:id="cbMucDoEdit" layoutX="421.0" layoutY="280.0" prefWidth="180.0" promptText="Chọn mức độ" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                            <children>
+                              <Button mnemonicParsing="false" onAction="#taiLaiHandler" text="Tải lại" />
                               <Button mnemonicParsing="false" onAction="#luuHandler" text="Lưu" />
                               <Button fx:id="btnXoaOrKhoiHoi" mnemonicParsing="false" onAction="#xoaOrPhucHoiHandler" text="Xoá" />
                               <Button mnemonicParsing="false" onAction="#troVeHandler" text="Trở về" />

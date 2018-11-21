@@ -56,12 +56,12 @@ public class DangNhapController implements Initializable {
 
     @FXML
     private void dangNhapHandler(ActionEvent event) {
-        String msgErr = ""; // Noi dung thong bao loi
+        StringBuilder msgErr = new StringBuilder(""); // Noi dung thong bao loi
 
         String taiKhoan = txtTaiKhoan.getText();
         if (taiKhoan.isEmpty()) {
             // Tai khoan rong
-            msgErr = msgErr.concat("Tài khoản: Trống!\n");
+            msgErr.append("Tài khoản: Trống!\n");
         } else {
             // Tai khoan khong duoc chua khoan trang
             taiKhoan = taiKhoan.trim().replaceAll("\\s+", "");
@@ -70,17 +70,17 @@ public class DangNhapController implements Initializable {
         String matKhau = txtMatKhau.getText();
         if (matKhau.isEmpty()) {
             // Mat khau rong
-            msgErr = msgErr.concat("Mật khẩu: Trống!\n");
+            msgErr.append("Mật khẩu: Trống!\n");
         } else if (matKhau.length() < 6) {
             // Mat khau co do dai duoi 6 ky tu
-            msgErr = msgErr.concat("Mật khẩu: Phải có tối thiểu 6 ký tự.\n");
+            msgErr.append("Mật khẩu: Phải có tối thiểu 6 ký tự.\n");
         }
 
-        if (!msgErr.isEmpty()) {
+        if (!msgErr.toString().isEmpty()) {
             // Neu co loi xay ra
             msg.setAlertType(Alert.AlertType.ERROR);
             msg.setHeaderText("Lỗi đăng nhập");
-            msg.setContentText(msgErr);
+            msg.setContentText(msgErr.toString());
             msg.show();
         } else {
             if (isTonTaiNguoiDung(taiKhoan, matKhau)) {

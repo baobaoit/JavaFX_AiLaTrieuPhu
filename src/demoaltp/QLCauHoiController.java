@@ -7,6 +7,7 @@ import demoaltp.modal.MucDo;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,14 +16,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -86,6 +90,9 @@ public class QLCauHoiController implements Initializable {
     @FXML
     private Button btnXoaOrKhoiHoi;
     private CauHoi sltCauHoiEdit;
+    private Stage curWindow;
+    @FXML
+    private TabPane tpQLCauHoi;
 
     @FXML
     private void troVeHandler(ActionEvent event) {
@@ -93,48 +100,53 @@ public class QLCauHoiController implements Initializable {
     }
 
     @FXML
+    private void taiLaiHandler(ActionEvent event) {
+        loadDataTableCauHoi();
+    }
+
+    @FXML
     private void luuHandler(ActionEvent event) {
-        String msgErr = ""; // Noi dung thong bao loi
-        String msgSucc = ""; // Noi dung thong bao thanh cong
+        StringBuilder msgErr = new StringBuilder(""); // Noi dung thong bao loi
+        StringBuilder msgSucc = new StringBuilder(""); // Noi dung thong bao thanh cong
 
         String noiDung = txtNoiDungEdit.getText();
         if (noiDung.isEmpty()) {
-            msgErr = msgErr.concat("Nội dung: Trống!\n");
+            msgErr.append("Nội dung: Trống!\n");
         } else {
             noiDung = noiDung.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Nội dung: %s\n", noiDung));
+            msgSucc.append(String.format("Nội dung: %s\n", noiDung));
         }
 
         String dapAnA = txtDapAnAEdit.getText();
         if (dapAnA.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án A: Trống!\n");
+            msgErr.append("Đáp án A: Trống!\n");
         } else {
             dapAnA = dapAnA.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án A: %s\n", dapAnA));
+            msgSucc.append(String.format("Đáp án A: %s\n", dapAnA));
         }
 
         String dapAnB = txtDapAnBEdit.getText();
         if (dapAnB.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án B: Trống!\n");
+            msgErr.append("Đáp án B: Trống!\n");
         } else {
             dapAnB = dapAnB.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án B: %s\n", dapAnB));
+            msgSucc.append(String.format("Đáp án B: %s\n", dapAnB));
         }
 
         String dapAnC = txtDapAnCEdit.getText();
         if (dapAnC.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án C: Trống!\n");
+            msgErr.append("Đáp án C: Trống!\n");
         } else {
             dapAnC = dapAnC.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án C: %s\n", dapAnC));
+            msgSucc.append(String.format("Đáp án C: %s\n", dapAnC));
         }
 
         String dapAnD = txtDapAnDEdit.getText();
         if (dapAnD.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án D: Trống!\n");
+            msgErr.append("Đáp án D: Trống!\n");
         } else {
             dapAnD = dapAnD.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án D: %s\n", dapAnD));
+            msgSucc.append(String.format("Đáp án D: %s\n", dapAnD));
         }
 
         String dapAn = "A";
@@ -147,33 +159,33 @@ public class QLCauHoiController implements Initializable {
         } else if (rdoDEdit.isSelected()) {
             dapAn = rdoDEdit.getText();
         }
-        msgSucc = msgSucc.concat(String.format("Đáp án: %s\n", dapAn));
+        msgSucc.append(String.format("Đáp án: %s\n", dapAn));
 
         LinhVuc sltLinhVuc = cbLinhVucEdit.getSelectionModel().getSelectedItem();
         if (sltLinhVuc == null) {
-            msgErr = msgErr.concat("Lĩnh vực: Chưa chọn!\n");
+            msgErr.append("Lĩnh vực: Chưa chọn!\n");
         } else {
-            msgSucc = msgSucc.concat(String.format("Lĩnh vực: %s\n", sltLinhVuc));
+            msgSucc.append(String.format("Lĩnh vực: %s\n", sltLinhVuc));
         }
 
         MucDo sltMucDo = cbMucDoEdit.getSelectionModel().getSelectedItem();
         if (sltMucDo == null) {
-            msgErr = msgErr.concat("Mức độ: Chưa chọn!\n");
+            msgErr.append("Mức độ: Chưa chọn!\n");
         } else {
-            msgSucc = msgSucc.concat(String.format("Mức độ: %s\n", sltMucDo));
+            msgSucc.append(String.format("Mức độ: %s\n", sltMucDo));
         }
 
-        if (!msgErr.isEmpty()) {
+        if (!msgErr.toString().isEmpty()) {
             // Neu co loi xay ra
             msg.setAlertType(Alert.AlertType.ERROR);
             msg.setHeaderText("Lỗi thêm câu hỏi");
-            msg.setContentText(msgErr);
+            msg.setContentText(msgErr.toString());
             msg.show();
         } else {
-            if (saveCauHoi(noiDung, dapAnA, dapAnB, dapAnC, dapAnD, dapAn, sltLinhVuc, sltMucDo, true) == 0) {
+            if (saveOrUpdateCauHoi(noiDung, dapAnA, dapAnB, dapAnC, dapAnD, dapAn, sltLinhVuc, sltMucDo, true) == 0) {
                 msg.setAlertType(Alert.AlertType.INFORMATION);
                 msg.setHeaderText("Cập nhật câu hỏi thành công");
-                msg.setContentText(msgSucc);
+                msg.setContentText(msgSucc.toString());
                 msg.show();
                 loadDataTableCauHoi();
             }
@@ -215,47 +227,47 @@ public class QLCauHoiController implements Initializable {
 
     @FXML
     private void themHandler(ActionEvent event) {
-        String msgErr = ""; // Noi dung thong bao loi
-        String msgSucc = ""; // Noi dung thong bao thanh cong
+        StringBuilder msgErr = new StringBuilder(""); // Noi dung thong bao loi
+        StringBuilder msgSucc = new StringBuilder(""); // Noi dung thong bao thanh cong
 
         String noiDung = txtNoiDung.getText();
         if (noiDung.isEmpty()) {
-            msgErr = msgErr.concat("Nội dung: Trống!\n");
+            msgErr.append("Nội dung: Trống!\n");
         } else {
             noiDung = noiDung.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Nội dung: %s\n", noiDung));
+            msgSucc.append(String.format("Nội dung: %s\n", noiDung));
         }
 
         String dapAnA = txtDapAnA.getText();
         if (dapAnA.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án A: Trống!\n");
+            msgErr.append("Đáp án A: Trống!\n");
         } else {
             dapAnA = dapAnA.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án A: %s\n", dapAnA));
+            msgSucc.append(String.format("Đáp án A: %s\n", dapAnA));
         }
 
         String dapAnB = txtDapAnB.getText();
         if (dapAnB.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án B: Trống!\n");
+            msgErr.append("Đáp án B: Trống!\n");
         } else {
             dapAnB = dapAnB.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án B: %s\n", dapAnB));
+            msgSucc.append(String.format("Đáp án B: %s\n", dapAnB));
         }
 
         String dapAnC = txtDapAnC.getText();
         if (dapAnC.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án C: Trống!\n");
+            msgErr.append("Đáp án C: Trống!\n");
         } else {
             dapAnC = dapAnC.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án C: %s\n", dapAnC));
+            msgSucc.append(String.format("Đáp án C: %s\n", dapAnC));
         }
 
         String dapAnD = txtDapAnD.getText();
         if (dapAnD.isEmpty()) {
-            msgErr = msgErr.concat("Đáp án D: Trống!\n");
+            msgErr.append("Đáp án D: Trống!\n");
         } else {
             dapAnD = dapAnD.trim().replaceAll("\\s+", " ");
-            msgSucc = msgSucc.concat(String.format("Đáp án D: %s\n", dapAnD));
+            msgSucc.append(String.format("Đáp án D: %s\n", dapAnD));
         }
 
         String dapAn = "A";
@@ -268,64 +280,78 @@ public class QLCauHoiController implements Initializable {
         } else if (rdoD.isSelected()) {
             dapAn = rdoD.getText();
         }
-        msgSucc = msgSucc.concat(String.format("Đáp án: %s\n", dapAn));
+        msgSucc.append(String.format("Đáp án: %s\n", dapAn));
 
         LinhVuc sltLinhVuc = cbLinhVuc.getSelectionModel().getSelectedItem();
         if (sltLinhVuc == null) {
-            msgErr = msgErr.concat("Lĩnh vực: Chưa chọn!\n");
+            msgErr.append("Lĩnh vực: Chưa chọn!\n");
         } else {
-            msgSucc = msgSucc.concat(String.format("Lĩnh vực: %s\n", sltLinhVuc));
+            msgSucc.append(String.format("Lĩnh vực: %s\n", sltLinhVuc));
         }
 
         MucDo sltMucDo = cbMucDo.getSelectionModel().getSelectedItem();
         if (sltMucDo == null) {
-            msgErr = msgErr.concat("Mức độ: Chưa chọn!\n");
+            msgErr.append("Mức độ: Chưa chọn!\n");
         } else {
-            msgSucc = msgSucc.concat(String.format("Mức độ: %s\n", sltMucDo));
+            msgSucc.append(String.format("Mức độ: %s\n", sltMucDo));
         }
 
-        if (!msgErr.isEmpty()) {
+        if (!msgErr.toString().isEmpty()) {
             // Neu co loi xay ra
             msg.setAlertType(Alert.AlertType.ERROR);
             msg.setHeaderText("Lỗi thêm câu hỏi");
-            msg.setContentText(msgErr);
+            msg.setContentText(msgErr.toString());
             msg.show();
         } else {
-            switch (saveCauHoi(noiDung, dapAnA, dapAnB, dapAnC, dapAnD, dapAn, sltLinhVuc, sltMucDo, false)) {
-                case 0:
-                    msg.setAlertType(Alert.AlertType.WARNING);
-                    msg.setHeaderText("Cảnh báo");
-                    msg.setContentText("Câu hỏi này đã tồn tại. Vui lòng nhập câu hỏi khác!\nXin cảm ơn.");
-                    msg.show();
-                    break;
-                case 1:
-                    msg.setAlertType(Alert.AlertType.INFORMATION);
-                    msg.setHeaderText("Thêm câu hỏi thành công");
-                    msg.setContentText(msgSucc);
-                    msg.show();
-                    break;
+            msg.setAlertType(Alert.AlertType.CONFIRMATION);
+            msg.setHeaderText("Chú ý");
+            msg.setContentText("Nội dung câu hỏi không thể thay đổi sau khi được thêm!\nVui lòng kiểm tra kỹ nội dung câu hỏi trước khi thêm.");
+            Optional<ButtonType> option = msg.showAndWait();
+
+            if (option.get() == ButtonType.OK) {
+                switch (saveOrUpdateCauHoi(noiDung, dapAnA, dapAnB, dapAnC, dapAnD, dapAn, sltLinhVuc, sltMucDo, false)) {
+                    case 0:
+                        msg.setAlertType(Alert.AlertType.WARNING);
+                        msg.setHeaderText("Cảnh báo");
+                        msg.setContentText("Câu hỏi này đã tồn tại. Vui lòng nhập câu hỏi khác!\nXin cảm ơn.");
+                        msg.show();
+                        break;
+                    case 1:
+                        msg.setAlertType(Alert.AlertType.INFORMATION);
+                        msg.setHeaderText("Thêm câu hỏi thành công");
+                        msg.setContentText(msgSucc.toString());
+                        msg.show();
+                        break;
+                }
             }
         }
     }
 
-    private int saveCauHoi(String noiDung, String dapAnA, String dapAnB, String dapAnC, String dapAnD, String dapAn, LinhVuc sltLinhVuc, MucDo sltMucDo, boolean isCapNhat) {
-        int tinhTrangCH = 0; // 0: ton tai cau hoi nay, 1: them cau hoi thanh cong
+    private int saveOrUpdateCauHoi(String noiDung, String dapAnA, String dapAnB, String dapAnC, String dapAnD, String dapAn, LinhVuc sltLinhVuc, MucDo sltMucDo, boolean isCapNhat) {
+        int tinhTrangCH = 0; // 0: ton tai (hoac cap nhat) cau hoi nay, 1: them cau hoi thanh cong
         Session session = factory.openSession();
-        CauHoi cauHoi = (CauHoi) session.get(CauHoi.class, noiDung);
         Transaction trans = session.beginTransaction();
+        CauHoi cauHoi = (CauHoi) session.get(CauHoi.class, noiDung);
         if (cauHoi == null) {
             // Them moi
-            tinhTrangCH = isCapNhat ? 0 : 1;
-            cauHoi = new CauHoi();
+            tinhTrangCH = 1;
+            cauHoi = new CauHoi(noiDung, dapAnA, dapAnB, dapAnC, dapAnD, dapAn, sltLinhVuc, sltMucDo, 0);
+            session.save(cauHoi);
+        } else {
+            if (isCapNhat) {
+                // Cap nhat
+                cauHoi.setDapAnA(dapAnA);
+                cauHoi.setDapAnB(dapAnB);
+                cauHoi.setDapAnC(dapAnC);
+                cauHoi.setDapAnD(dapAnD);
+                cauHoi.setDapAn(dapAn);
+                cauHoi.setLinhVuc(sltLinhVuc);
+                cauHoi.setMucDo(sltMucDo);
+
+                cauHoi = (CauHoi) session.merge(cauHoi);
+                session.update(cauHoi);
+            }
         }
-        cauHoi.setNoiDung(noiDung);
-        cauHoi.setDapAnA(dapAnA);
-        cauHoi.setDapAnB(dapAnB);
-        cauHoi.setDapAnC(dapAnC);
-        cauHoi.setDapAnD(dapAnD);
-        cauHoi.setDapAn(dapAn);
-        cauHoi.setXoa(0);
-        session.save(cauHoi);
         trans.commit();
         session.close();
         return tinhTrangCH;
@@ -387,7 +413,7 @@ public class QLCauHoiController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         factory = HibernateUtil.getSessionFactory();
-        msg = new Alert(Alert.AlertType.ERROR);
+        msg = new Alert(Alert.AlertType.WARNING);
         msg.setTitle("Ai là triệu phú");
 
         cbLinhVuc.setItems(loadLinhVuc());
