@@ -31,6 +31,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * FXML Controller class
@@ -93,6 +94,8 @@ public class QLCauHoiController implements Initializable {
     private Stage curWindow;
     @FXML
     private TabPane tpQLCauHoi;
+    @FXML
+    private TextField txtTuKhoa;
 
     @FXML
     private void troVeHandler(ActionEvent event) {
@@ -101,7 +104,7 @@ public class QLCauHoiController implements Initializable {
 
     @FXML
     private void taiLaiHandler(ActionEvent event) {
-        loadDataTableCauHoi();
+        loadDataTableCauHoi("");
     }
 
     @FXML
@@ -187,7 +190,7 @@ public class QLCauHoiController implements Initializable {
                 msg.setHeaderText("Cập nhật câu hỏi thành công");
                 msg.setContentText(msgSucc.toString());
                 msg.show();
-                loadDataTableCauHoi();
+                loadDataTableCauHoi("");
             }
         }
     }
@@ -208,7 +211,7 @@ public class QLCauHoiController implements Initializable {
             msg.setContentText("Đã phục hồi lại câu hỏi này!");
             msg.show();
         }
-        loadDataTableCauHoi();
+        loadDataTableCauHoi("");
     }
 
     private void xoaOrPhucHoiCauHoi(boolean isXoa) {
@@ -220,9 +223,14 @@ public class QLCauHoiController implements Initializable {
             cauHoi.setXoa(0);
         }
         Transaction trans = session.beginTransaction();
-        session.save(cauHoi);
-        trans.commit();
-        session.close();
+        try {
+            session.save(cauHoi);
+            trans.commit();
+        } catch (Exception ex) {
+            trans.rollback();
+        } finally {
+            session.close();
+        }
     }
 
     @FXML
@@ -352,7 +360,11 @@ public class QLCauHoiController implements Initializable {
                 session.update(cauHoi);
             }
         }
-        trans.commit();
+        try {
+            trans.commit();
+        } catch (Exception ex) {
+            trans.rollback();
+        }
         session.close();
         return tinhTrangCH;
     }
@@ -375,10 +387,13 @@ public class QLCauHoiController implements Initializable {
         return FXCollections.observableList(lstMucDo);
     }
 
-    private ObservableList<CauHoi> loadCauHoi() {
+    private ObservableList<CauHoi> loadCauHoi(String tuKhoa) {
         List<CauHoi> lstCauHoi = new ArrayList<>();
         Session session = factory.openSession();
         Criteria cr = session.createCriteria(CauHoi.class);
+        if (!tuKhoa.isEmpty()) {
+            cr.add(Restrictions.ilike("noiDung", String.format("%%%s%%", tuKhoa)));
+        }
         lstCauHoi = cr.list();
         session.close();
         return FXCollections.observableList(lstCauHoi);
@@ -420,9 +435,13 @@ public class QLCauHoiController implements Initializable {
         cbLinhVucEdit.setItems(loadLinhVuc());
         cbMucDo.setItems(loadMucDo());
         cbMucDoEdit.setItems(loadMucDo());
+        
+        txtTuKhoa.textProperty().addListener(e -> {
+            loadDataTableCauHoi(txtTuKhoa.getText());
+        });
 
         generateTableViewColumns();
-        loadDataTableCauHoi();
+        loadDataTableCauHoi("");
         tbCauHoi.setRowFactory(tv -> {
             TableRow<CauHoi> row = new TableRow<>();
             row.setOnMouseClicked(e -> {
@@ -436,9 +455,9 @@ public class QLCauHoiController implements Initializable {
         });
     }
 
-    private void loadDataTableCauHoi() {
+    private void loadDataTableCauHoi(String tuKhoa) {
         tbCauHoi.getItems().clear();
-        tbCauHoi.setItems(loadCauHoi());
+        tbCauHoi.setItems(loadCauHoi(tuKhoa));
     }
 
     private void setContentEdit(CauHoi cauHoi) {

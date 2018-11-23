@@ -173,7 +173,11 @@ public class DangKyController implements Initializable {
             Transaction trans = session.beginTransaction();
             nguoiDung = new NguoiDung(taiKhoan, matKhau, hoTen, gioiTinh, namSinh, queQuan);
             session.save(nguoiDung);
-            trans.commit();
+            try {
+                trans.commit();
+            } catch (Exception ex) {
+                trans.rollback();
+            }
         }
         session.close();
         return tinhTrangDK;

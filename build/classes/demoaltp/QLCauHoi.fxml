@@ -131,6 +131,7 @@
                         </HBox>
                      </children>
                   </GridPane>
+                  <TextField fx:id="txtTuKhoa" promptText="Nhập từ khoá tìm kiếm câu hỏi." />
                   <TableView fx:id="tbCauHoi" prefHeight="273.0" prefWidth="822.0" />
                </children>
             </VBox>
