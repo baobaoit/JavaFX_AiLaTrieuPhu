@@ -16,7 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,7 +30,7 @@ public class DangKyController implements Initializable {
 
     private SessionFactory factory;
     @FXML
-    private GridPane gpDangKy;
+    private BorderPane bpDangKy;
     @FXML
     private TextField txtTaiKhoan;
     @FXML
@@ -53,9 +53,9 @@ public class DangKyController implements Initializable {
     @FXML
     private void troVeHandler(ActionEvent event) {
         try {
-            curWindow = (Stage) gpDangKy.getScene().getWindow();
+            curWindow = (Stage) bpDangKy.getScene().getWindow();
 
-            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("DangNhap.fxml"))));
+            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLLogin_DHGB.fxml"))));
             curWindow.show();
         } catch (IOException ex) {
             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);

@@ -15,7 +15,7 @@ public class DemoALTP extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("QLCauHoi.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument_DHGB.fxml"));
         
         Scene scene = new Scene(root);
         

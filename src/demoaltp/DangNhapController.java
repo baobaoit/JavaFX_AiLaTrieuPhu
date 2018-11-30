@@ -15,7 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,24 +30,32 @@ public class DangNhapController implements Initializable {
     private SessionFactory factory;
     private Alert msg;
     @FXML
-    private GridPane gpDangNhap;
+    private VBox vbDangNhap;
     @FXML
     private TextField txtTaiKhoan;
     @FXML
     private PasswordField txtMatKhau;
     private Stage curWindow;
+    private boolean play;
 
     @FXML
     private void troVeHandler(ActionEvent event) {
-        
+        try {
+            curWindow = (Stage) vbDangNhap.getScene().getWindow();
+
+            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLDocument_DHGB.fxml"))));
+            curWindow.show();
+        } catch (IOException ex) {
+            Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
     private void dangKyHandler(ActionEvent event) {
         try {
-            curWindow = (Stage)gpDangNhap.getScene().getWindow();
-            
-            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("DangKy.fxml"))));
+            curWindow = (Stage) vbDangNhap.getScene().getWindow();
+
+            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLSignUp_DHGB.fxml"))));
             curWindow.show();
         } catch (IOException ex) {
             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,10 +92,22 @@ public class DangNhapController implements Initializable {
             msg.show();
         } else {
             if (isTonTaiNguoiDung(taiKhoan, matKhau)) {
-                msg.setAlertType(Alert.AlertType.INFORMATION);
-                msg.setHeaderText("Đăng nhập thành công");
-                msg.setContentText("Chào mừng bạn quay trở lại! Chiến thôi!");
-                msg.show();
+                if (this.play) {
+                    this.playAiLaTrieuPhu();
+                } else {
+                    if (taiKhoan.equals("admin")) {
+                        try {
+                            curWindow = (Stage) vbDangNhap.getScene().getWindow();
+
+                            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("QLCauHoi.fxml"))));
+                            curWindow.show();
+                        } catch (IOException ex) {
+                            Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        this.playAiLaTrieuPhu();
+                    }
+                }
             } else {
                 msg.setAlertType(Alert.AlertType.ERROR);
                 msg.setHeaderText("Lỗi đăng nhập");
@@ -95,6 +115,13 @@ public class DangNhapController implements Initializable {
                 msg.show();
             }
         }
+    }
+
+    private void playAiLaTrieuPhu() {
+        msg.setAlertType(Alert.AlertType.INFORMATION);
+        msg.setHeaderText("Đăng nhập thành công");
+        msg.setContentText("Chào mừng bạn quay trở lại! Chiến thôi!");
+        msg.show();
     }
 
     private boolean isTonTaiNguoiDung(String taiKhoan, String matKhau) {
@@ -121,4 +148,11 @@ public class DangNhapController implements Initializable {
         msg.setTitle("Ai là triệu phú");
     }
 
+    public boolean isPlay() {
+        return play;
+    }
+
+    public void setPlay(boolean play) {
+        this.play = play;
+    }
 }
