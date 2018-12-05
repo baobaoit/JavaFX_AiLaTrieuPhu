@@ -108,7 +108,6 @@ public class QLCauHoiController implements Initializable {
             curWindow = (Stage) tpQLCauHoi.getScene().getWindow();
 
             curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLDocument_DHGB.fxml"))));
-            curWindow.show();
         } catch (IOException ex) {
             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
         }

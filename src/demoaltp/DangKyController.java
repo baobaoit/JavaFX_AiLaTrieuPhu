@@ -56,7 +56,6 @@ public class DangKyController implements Initializable {
             curWindow = (Stage) bpDangKy.getScene().getWindow();
 
             curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLLogin_DHGB.fxml"))));
-            curWindow.show();
         } catch (IOException ex) {
             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
         }

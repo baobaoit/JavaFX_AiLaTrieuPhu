@@ -4,6 +4,7 @@ import demoaltp.database.HibernateUtil;
 import demoaltp.modal.NguoiDung;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -44,7 +46,6 @@ public class DangNhapController implements Initializable {
             curWindow = (Stage) vbDangNhap.getScene().getWindow();
 
             curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLDocument_DHGB.fxml"))));
-            curWindow.show();
         } catch (IOException ex) {
             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -56,7 +57,6 @@ public class DangNhapController implements Initializable {
             curWindow = (Stage) vbDangNhap.getScene().getWindow();
 
             curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLSignUp_DHGB.fxml"))));
-            curWindow.show();
         } catch (IOException ex) {
             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -100,7 +100,6 @@ public class DangNhapController implements Initializable {
                             curWindow = (Stage) vbDangNhap.getScene().getWindow();
 
                             curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("QLCauHoi.fxml"))));
-                            curWindow.show();
                         } catch (IOException ex) {
                             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -121,7 +120,17 @@ public class DangNhapController implements Initializable {
         msg.setAlertType(Alert.AlertType.INFORMATION);
         msg.setHeaderText("Đăng nhập thành công");
         msg.setContentText("Chào mừng bạn quay trở lại! Chiến thôi!");
-        msg.show();
+
+        Optional<ButtonType> option = msg.showAndWait();
+        if (option.get() == ButtonType.OK) {
+            try {
+                curWindow = (Stage) vbDangNhap.getScene().getWindow();
+
+                curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("ChoiGame.fxml"))));
+            } catch (IOException ex) {
+                Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     private boolean isTonTaiNguoiDung(String taiKhoan, String matKhau) {
