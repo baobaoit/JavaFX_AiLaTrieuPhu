@@ -12,6 +12,11 @@ BorderPane {
     -fx-alignment: BOTTOM_CENTER;
 }
 
+.HoTro {
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
+}
+
 HBox.QuestionAndAnswer {
     -fx-spacing: 250;
     -fx-padding: 0 0 10 0;

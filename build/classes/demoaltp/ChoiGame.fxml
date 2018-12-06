@@ -6,12 +6,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="830.0" stylesheets="@ChoiGameStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="demoaltp.ChoiGameController">
    <right>
-      <VBox fx:id="vbCotPhai" prefHeight="587.0" prefWidth="126.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbCotPhai" prefHeight="587.0" prefWidth="198.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <HBox prefHeight="50.0" prefWidth="198.0" styleClass="HoTro">
+               <children>
+                  <Button mnemonicParsing="false" text="50:50" />
+                  <Button mnemonicParsing="false" text="Gợi ý" />
+               </children></HBox>
          </children>
       </VBox>
    </right>
@@ -21,14 +24,14 @@
             <Label fx:id="lbNoiDung" text="Label" textAlignment="CENTER" wrapText="true" />
             <HBox prefHeight="100.0" prefWidth="200.0" styleClass="QuestionAndAnswer">
                <children>
-                  <Button fx:id="btnChoiceA" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" text="Button" wrapText="true" />
-                  <Button fx:id="btnChoiceB" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" text="Button" wrapText="true" />
+                  <Button fx:id="btnChoiceA" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" onAction="#chonDapAnHandler" text="Button" wrapText="true" />
+                  <Button fx:id="btnChoiceB" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" onAction="#chonDapAnHandler" text="Button" wrapText="true" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" styleClass="QuestionAndAnswer">
                <children>
-                  <Button fx:id="btnChoiceC" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" text="Button" wrapText="true" />
-                  <Button fx:id="btnChoiceD" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" text="Button" wrapText="true" />
+                  <Button fx:id="btnChoiceC" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" onAction="#chonDapAnHandler" text="Button" wrapText="true" />
+                  <Button fx:id="btnChoiceD" maxWidth="180.0" minWidth="180.0" mnemonicParsing="false" onAction="#chonDapAnHandler" text="Button" wrapText="true" />
                </children>
             </HBox>
          </children>
