@@ -12,7 +12,7 @@
          <children>
             <HBox prefHeight="50.0" prefWidth="198.0" styleClass="HoTro">
                <children>
-                  <Button mnemonicParsing="false" text="50:50" />
+                  <Button fx:id="btnTroGiup5050" mnemonicParsing="false" onAction="#troGiup5050" text="50:50" />
                   <Button mnemonicParsing="false" text="Gợi ý" />
                </children></HBox>
          </children>
