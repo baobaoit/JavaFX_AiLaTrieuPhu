@@ -116,6 +116,7 @@ public class QLCauHoiController implements Initializable {
     @FXML
     private void taiLaiHandler(ActionEvent event) {
         loadDataTableCauHoi("");
+        txtTuKhoa.setText("");
     }
 
     @FXML
@@ -202,6 +203,7 @@ public class QLCauHoiController implements Initializable {
                 msg.setContentText(msgSucc.toString());
                 msg.show();
                 loadDataTableCauHoi("");
+                txtTuKhoa.setText("");
             }
         }
     }
@@ -223,6 +225,7 @@ public class QLCauHoiController implements Initializable {
             msg.show();
         }
         loadDataTableCauHoi("");
+        txtTuKhoa.setText("");
     }
 
     private void xoaOrPhucHoiCauHoi(boolean isXoa) {

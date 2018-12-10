@@ -75,40 +75,40 @@ public class ChoiGameController implements Initializable {
         msg = new Alert(Alert.AlertType.ERROR);
         msg.setTitle("Ai là triệu phú");
 
-        this.initMocDiem();
-        this.showMocDiem();
+        initMocDiem();
+        showMocDiem();
 
-        this.getMucDo();
-        this.newGame();
+        getMucDo();
+        newGame();
     }
 
     private void resetButtonDisable() {
-        this.btnChoiceA.setDisable(false);
-        this.btnChoiceB.setDisable(false);
-        this.btnChoiceC.setDisable(false);
-        this.btnChoiceD.setDisable(false);
+        btnChoiceA.setDisable(false);
+        btnChoiceB.setDisable(false);
+        btnChoiceC.setDisable(false);
+        btnChoiceD.setDisable(false);
     }
 
     private void newGame() {
-        this.viTriCauHoi = 0;
-        this.mocCauHoi = 0;
-        this.mucDoCauHoi = 0;
-        this.resetButtonDisable();
-        this.btnTroGiup5050.setDisable(false);
+        viTriCauHoi = 0;
+        mocCauHoi = 0;
+        mucDoCauHoi = 0;
+        resetButtonDisable();
+        btnTroGiup5050.setDisable(false);
         if (lstCauHoiDe != null) {
             lstCauHoiDe.clear();
         }
-        this.getCauHoiDe();
+        getCauHoiDe();
         if (lstCauHoiTB != null) {
             lstCauHoiTB.clear();
         }
-        this.getCauHoiTB();
+        getCauHoiTB();
         if (lstCauHoiKho != null) {
             lstCauHoiKho.clear();
         }
-        this.getCauHoiKho();
-        this.showCauHoi();
-        this.showMocHienTai();
+        getCauHoiKho();
+        showCauHoi();
+        showMocHienTai();
     }
 
     @FXML
@@ -134,7 +134,7 @@ public class ChoiGameController implements Initializable {
             btnChoiceD.setDisable(true);
         }
 
-        this.btnTroGiup5050.setDisable(true);
+        btnTroGiup5050.setDisable(true);
     }
 
     @FXML
@@ -162,13 +162,13 @@ public class ChoiGameController implements Initializable {
                     Optional<ButtonType> optChoiHayDung = msg.showAndWait();
 
                     if (optChoiHayDung.get() == ButtonType.OK) {
-                        this.viTriCauHoi++;
-                        this.mocCauHoi++;
-                        this.showCauHoi();
-                        this.showMocHienTai();
-                        this.resetMocTruoc();
+                        viTriCauHoi++;
+                        mocCauHoi++;
+                        showCauHoi();
+                        showMocHienTai();
+                        resetMocTruoc();
                         btnClicked.setStyle("");
-                        this.resetButtonDisable();
+                        resetButtonDisable();
                     } else {
                         msg.setAlertType(Alert.AlertType.INFORMATION);
                         msg.setHeaderText("Chúc mừng bạn");
@@ -187,11 +187,11 @@ public class ChoiGameController implements Initializable {
                     } // Xu ly khi hien thong bao dung
                 } else {
                     // Toi cau hoi so 15
-                    this.showDialogThongBao("Bạn đã chiến thắng", "Chúc mừng bạn đã xuất sắc vượt qua 15 câu hỏi.\nBạn có muốn chơi lại không?");
+                    showDialogThongBao("Bạn đã chiến thắng", "Chúc mừng bạn đã xuất sắc vượt qua 15 câu hỏi.\nBạn có muốn chơi lại không?");
                 }
             } else {
                 // Tra loi sai
-                this.showDialogThongBao("Bạn đã thua", "Bạn có muốn chơi lại không?");
+                showDialogThongBao("Bạn đã thua", "Bạn có muốn chơi lại không?");
             }
         } else {
             // Cancel
@@ -206,9 +206,9 @@ public class ChoiGameController implements Initializable {
 
         Optional<ButtonType> option = msg.showAndWait();
         if (option.get() == ButtonType.OK) {
-            this.mocCauHoi++;
-            this.resetMocTruoc();
-            this.newGame();
+            mocCauHoi++;
+            resetMocTruoc();
+            newGame();
         } else {
             Platform.exit();
         }
@@ -248,48 +248,43 @@ public class ChoiGameController implements Initializable {
                 break;
         }
 
-        this.lbNoiDung.setText(curCauHoi.getNoiDung());
-        this.btnChoiceA.setText(String.format("A. %s", curCauHoi.getDapAnA()));
-        this.btnChoiceB.setText(String.format("B. %s", curCauHoi.getDapAnB()));
-        this.btnChoiceC.setText(String.format("C. %s", curCauHoi.getDapAnC()));
-        this.btnChoiceD.setText(String.format("D. %s", curCauHoi.getDapAnD()));
+        lbNoiDung.setText(curCauHoi.getNoiDung());
+        btnChoiceA.setText(String.format("A. %s", curCauHoi.getDapAnA()));
+        btnChoiceB.setText(String.format("B. %s", curCauHoi.getDapAnB()));
+        btnChoiceC.setText(String.format("C. %s", curCauHoi.getDapAnC()));
+        btnChoiceD.setText(String.format("D. %s", curCauHoi.getDapAnD()));
     }
 
     private void getMucDo() {
         Session session = factory.openSession();
         Criteria cr = session.createCriteria(MucDo.class);
-        this.lstMucDo = cr.list();
+        lstMucDo = cr.list();
         session.close();
+    }
+    
+    private List<CauHoi> getCauHoi(int mucDo) {
+        List<CauHoi> lstCH = null;
+        Session session = factory.openSession();
+        Criteria cr = session.createCriteria(CauHoi.class);
+        cr.add(Restrictions.eq("mucDo", lstMucDo.get(mucDo)));
+        cr.add(Restrictions.eq("xoa", 0));
+        cr.add(Restrictions.sqlRestriction("1=1 ORDER BY RAND()"));
+        cr.setMaxResults(5);
+        lstCH = cr.list();
+        session.close();
+        return lstCH;
     }
 
     private void getCauHoiDe() {
-        Session session = factory.openSession();
-        Criteria cr = session.createCriteria(CauHoi.class);
-        cr.add(Restrictions.eq("mucDo", lstMucDo.get(0)));
-        cr.add(Restrictions.sqlRestriction("1=1 ORDER BY RAND()"));
-        cr.setMaxResults(5);
-        this.lstCauHoiDe = cr.list();
-        session.close();
+        lstCauHoiDe = getCauHoi(0);
     }
 
     private void getCauHoiTB() {
-        Session session = factory.openSession();
-        Criteria cr = session.createCriteria(CauHoi.class);
-        cr.add(Restrictions.eq("mucDo", lstMucDo.get(1)));
-        cr.add(Restrictions.sqlRestriction("1=1 ORDER BY RAND()"));
-        cr.setMaxResults(5);
-        this.lstCauHoiTB = cr.list();
-        session.close();
+        lstCauHoiTB = getCauHoi(1);
     }
 
     private void getCauHoiKho() {
-        Session session = factory.openSession();
-        Criteria cr = session.createCriteria(CauHoi.class);
-        cr.add(Restrictions.eq("mucDo", lstMucDo.get(2)));
-        cr.add(Restrictions.sqlRestriction("1=1 ORDER BY RAND()"));
-        cr.setMaxResults(5);
-        this.lstCauHoiKho = cr.list();
-        session.close();
+        lstCauHoiKho = getCauHoi(2);
     }
 
     private void showMocDiem() {

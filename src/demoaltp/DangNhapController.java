@@ -99,7 +99,7 @@ public class DangNhapController implements Initializable {
                         try {
                             curWindow = (Stage) vbDangNhap.getScene().getWindow();
 
-                            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("QLCauHoi.fxml"))));
+                            curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLQLCauHoi_DHGB.fxml"))));
                         } catch (IOException ex) {
                             Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
                         }
