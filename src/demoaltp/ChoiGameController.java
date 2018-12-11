@@ -19,6 +19,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -27,7 +31,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -65,6 +71,8 @@ public class ChoiGameController implements Initializable {
     private Button btnChoiceD;
     @FXML
     private Button btnTroGiup5050;
+    @FXML
+    private Button btnGoiY;
 
     /**
      * Initializes the controller class.
@@ -95,6 +103,7 @@ public class ChoiGameController implements Initializable {
         mucDoCauHoi = 0;
         resetButtonDisable();
         btnTroGiup5050.setDisable(false);
+        btnGoiY.setDisable(false);
         if (lstCauHoiDe != null) {
             lstCauHoiDe.clear();
         }
@@ -111,8 +120,68 @@ public class ChoiGameController implements Initializable {
         showMocHienTai();
     }
 
+    private void showKhanGiaBinhChon(int dapAnA, int dapAnB, int dapAnC, int dapAnD) {
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        BarChart bChart = new BarChart(xAxis, yAxis);
+        bChart.setTitle("Trợ giúp");
+        xAxis.setLabel("Đáp án");
+        yAxis.setLabel("Phần trăm chọn");
+
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Khán giả bình chọn");
+        series.getData().add(new XYChart.Data<>("A", dapAnA));
+        series.getData().add(new XYChart.Data<>("B", dapAnB));
+        series.getData().add(new XYChart.Data<>("C", dapAnC));
+        series.getData().add(new XYChart.Data<>("D", dapAnD));
+
+        bChart.getData().add(series);
+        Scene scene = new Scene(bChart, 800, 600);
+        Stage stage = new Stage(StageStyle.UTILITY);
+        stage.setScene(scene);
+        stage.setAlwaysOnTop(true);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+    }
+
+    private int[] getLstPhanTram() {
+        List<String> lstNhan = new ArrayList<>();
+        lstNhan.add("A");
+        lstNhan.add("B");
+        lstNhan.add("C");
+        lstNhan.add("D");
+
+        int[] lstPhanTram = new int[4];
+        int viTriDapAnDung = lstNhan.indexOf(curCauHoi.getDapAn());
+        int phanTramDapAnDung = (mocCauHoi <= 4) ? 70 : (mocCauHoi > 4 && mocCauHoi <= 9) ? 60 : 50;
+        lstPhanTram[viTriDapAnDung] = phanTramDapAnDung;
+        Random rand = new Random();
+        int phanTramConLai = 100 - phanTramDapAnDung;
+
+        if (lstPhanTram[0] == 0) {
+            lstPhanTram[0] = rand.nextInt(phanTramConLai + 1);
+            phanTramConLai -= lstPhanTram[0];
+        }
+
+        for (int i = 1; i < 4; i++) {
+            if (i != viTriDapAnDung) {
+                lstPhanTram[i] = rand.nextInt(phanTramConLai + 1);
+                phanTramConLai -= lstPhanTram[i];
+            }
+        }
+        
+        return lstPhanTram;
+    }
+
     @FXML
-    private void troGiup5050(ActionEvent event) {
+    private void goiYHandler(ActionEvent event) {
+        int[] lstPhanTram = getLstPhanTram();
+        showKhanGiaBinhChon(lstPhanTram[0], lstPhanTram[1], lstPhanTram[2], lstPhanTram[3]);
+        btnGoiY.setDisable(true);
+    }
+
+    @FXML
+    private void troGiup5050Handler(ActionEvent event) {
         List<String> dapAn = new ArrayList<>();
         dapAn.add("A");
         dapAn.add("B");
@@ -261,7 +330,7 @@ public class ChoiGameController implements Initializable {
         lstMucDo = cr.list();
         session.close();
     }
-    
+
     private List<CauHoi> getCauHoi(int mucDo) {
         List<CauHoi> lstCH = null;
         Session session = factory.openSession();
