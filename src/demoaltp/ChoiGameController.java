@@ -73,6 +73,7 @@ public class ChoiGameController implements Initializable {
     private Button btnTroGiup5050;
     @FXML
     private Button btnGoiY;
+    private String btnNormStyle = String.format("-fx-background-color: %s; -fx-border-color: %s; -fx-background-radius: %d; -fx-border-radius: %d",  "#6495ED", " #00FFFF", 10, 10);
 
     /**
      * Initializes the controller class.
@@ -169,7 +170,7 @@ public class ChoiGameController implements Initializable {
                 phanTramConLai -= lstPhanTram[i];
             }
         }
-        
+
         return lstPhanTram;
     }
 
@@ -211,7 +212,7 @@ public class ChoiGameController implements Initializable {
         Button btnClicked = (Button) event.getSource();
         String answer = btnClicked.getText().substring(0, 1);
 
-        btnClicked.setStyle("-fx-background-color: red; -fx-font-weight: BOLD; -fx-font-size: 20");
+        btnClicked.setStyle("-fx-background-color: RED; -fx-border-color: #00FFFF; -fx-background-radius: 10; -fx-border-radius: 10; -fx-font-weight: BOLD;");
 
         msg.setAlertType(Alert.AlertType.CONFIRMATION);
         msg.setHeaderText("Lựa chọn đáp án " + btnClicked.getText());
@@ -236,7 +237,7 @@ public class ChoiGameController implements Initializable {
                         showCauHoi();
                         showMocHienTai();
                         resetMocTruoc();
-                        btnClicked.setStyle("");
+                        btnClicked.setStyle(btnNormStyle);
                         resetButtonDisable();
                     } else {
                         msg.setAlertType(Alert.AlertType.INFORMATION);
@@ -256,19 +257,19 @@ public class ChoiGameController implements Initializable {
                     } // Xu ly khi hien thong bao dung
                 } else {
                     // Toi cau hoi so 15
-                    showDialogThongBao("Bạn đã chiến thắng", "Chúc mừng bạn đã xuất sắc vượt qua 15 câu hỏi.\nBạn có muốn chơi lại không?");
+                    showDialogThongBao("Bạn đã chiến thắng", "Chúc mừng bạn đã xuất sắc vượt qua 15 câu hỏi.\nBạn có muốn chơi lại không?", event);
                 }
             } else {
                 // Tra loi sai
-                showDialogThongBao("Bạn đã thua", "Bạn có muốn chơi lại không?");
+                showDialogThongBao("Bạn đã thua", "Bạn có muốn chơi lại không?", event);
             }
         } else {
             // Cancel
-            btnClicked.setStyle("");
+            btnClicked.setStyle(btnNormStyle);
         }
     }
 
-    private void showDialogThongBao(String headerText, String contentText) {
+    private void showDialogThongBao(String headerText, String contentText, ActionEvent event) {
         msg.setAlertType(Alert.AlertType.CONFIRMATION);
         msg.setHeaderText(headerText);
         msg.setContentText(contentText);
@@ -279,7 +280,13 @@ public class ChoiGameController implements Initializable {
             resetMocTruoc();
             newGame();
         } else {
-            Platform.exit();
+            try {
+                Stage curWindow = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                curWindow.setScene(new Scene(FXMLLoader.load(getClass().getResource("FXMLDocument_DHGB.fxml"))));
+            } catch (IOException ex) {
+                Logger.getLogger(DangNhapController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

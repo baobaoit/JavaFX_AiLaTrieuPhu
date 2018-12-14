@@ -16,8 +16,13 @@ BorderPane {
     -fx-alignment: CENTER;
     -fx-spacing: 10;
 }
+VBox{
+    -fx-background-image: url("img/background.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+}
 
 HBox.QuestionAndAnswer {
-    -fx-spacing: 250;
-    -fx-padding: 0 0 10 0;
+    -fx-spacing: 10;
+    -fx-padding: 0 0 20 0;
 }
