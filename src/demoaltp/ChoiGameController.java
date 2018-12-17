@@ -12,7 +12,6 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,7 +72,7 @@ public class ChoiGameController implements Initializable {
     private Button btnTroGiup5050;
     @FXML
     private Button btnGoiY;
-    private String btnNormStyle = String.format("-fx-background-color: %s; -fx-border-color: %s; -fx-background-radius: %d; -fx-border-radius: %d",  "#6495ED", " #00FFFF", 10, 10);
+    private String btnNormStyle = String.format("-fx-background-color: %s; -fx-border-color: %s; -fx-background-radius: %d; -fx-border-radius: %d", "#6495ED", " #00FFFF", 10, 10);
 
     /**
      * Initializes the controller class.
@@ -261,7 +260,17 @@ public class ChoiGameController implements Initializable {
                 }
             } else {
                 // Tra loi sai
-                showDialogThongBao("Bạn đã thua", "Bạn có muốn chơi lại không?", event);
+                String mocDiem;
+                if (mocCauHoi > 4 && mocCauHoi < 9) {
+                    mocDiem = lstMocDiem.get(4).getText();
+                    showDialogThongBao("Bạn đã thua", "Bạn nhận được phần thưởng là " + mocDiem.substring(mocDiem.indexOf(" ")) + ".\nBạn có muốn chơi lại không?", event);
+                } else if (mocCauHoi > 9) {
+                    mocDiem = lstMocDiem.get(9).getText();
+                    showDialogThongBao("Bạn đã thua", "Bạn nhận được phần thưởng là " + mocDiem.substring(mocDiem.indexOf(" ")) + ".\nBạn có muốn chơi lại không?", event);
+                } else {
+                    showDialogThongBao("Bạn đã thua", "Bạn có muốn chơi lại không?", event);
+                }
+                btnClicked.setStyle(btnNormStyle);
             }
         } else {
             // Cancel
