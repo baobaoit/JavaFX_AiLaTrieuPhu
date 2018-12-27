@@ -118,7 +118,7 @@ public class QLCauHoiController implements Initializable {
         loadDataTableCauHoi("");
         txtTuKhoa.setText("");
     }
-
+    
     @FXML
     private void luuHandler(ActionEvent event) {
         StringBuilder msgErr = new StringBuilder(""); // Noi dung thong bao loi

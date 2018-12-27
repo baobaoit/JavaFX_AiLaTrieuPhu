@@ -142,7 +142,7 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#luuHandler" prefHeight="38.0" prefWidth="79.0" style="-fx-background-color: #32CD32;" text="Lưu">
+                        <Button mnemonicParsing="false" onAction="#themHandler" prefHeight="38.0" prefWidth="79.0" style="-fx-background-color: #32CD32;" text="Thêm">
                            <font>
                               <Font size="16.0" />
                            </font>
